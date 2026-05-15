@@ -1,5 +1,6 @@
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: hidden; }
 
 /* Light mode (default) */
 :root, [data-theme="light"] {
@@ -70,8 +71,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  width: 100vw;
-  left: 0;
+  width: 100%;
   box-sizing: border-box;
 }
 .header-inner {
