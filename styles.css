@@ -1531,18 +1531,45 @@ main {
 
 /* ── Footer ── */
 footer {
-  text-align: center;
-  padding: 24px;
+  padding: 24px 32px;
   color: var(--text-muted);
   font-size: 0.8rem;
   border-top: 1px solid var(--border);
   margin-top: 16px;
 }
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-built { color: var(--text-muted); font-size: 0.82rem; }
+.footer-bottom { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.footer-dot { color: var(--border); }
 .footer-link {
   color: var(--accent);
   text-decoration: none;
+  font-size: 0.78rem;
 }
 .footer-link:hover { text-decoration: underline; }
+.footer-feedback-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.78rem;
+}
+.footer-feedback-link:hover { text-decoration: underline; }
+.footer-copyright { color: var(--text-muted); font-size: 0.78rem; }
+.results-feedback-link {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+.results-feedback-link:hover { color: var(--accent); text-decoration: underline; }
 
 /* ── Utilities ── */
 .hidden { display: none !important; }
