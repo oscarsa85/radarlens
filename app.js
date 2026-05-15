@@ -4,6 +4,17 @@ const MODEL      = 'anthropic/claude-haiku-4-5';
 const isLocalhost = ['localhost', '127.0.0.1'].includes(location.hostname);
 let DEV_MODE = false;
 
+// ── Project name placeholder — random on each load ───────────────────────────
+{
+  const placeholders = [
+    'e.g. Project Eclipse', 'e.g. Operation Sunrise', 'e.g. Project Titan',
+    'e.g. Initiative Apex', 'e.g. Project Nova', 'e.g. Operation Keystone',
+    'e.g. Project Orion', 'e.g. Initiative Horizon',
+  ];
+  const input = document.getElementById('project-name');
+  if (input) input.placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+}
+
 // ── State ────────────────────────────────────────────────────────────────────
 let risks = [];
 let issues = []; // kept for legacy functions — not used in new flow
