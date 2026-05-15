@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RadarLens — AI Superpowers for Project Managers</title>
+  <meta name="description" content="RadarLens — AI Superpowers for Project Managers. Identify risks, map stakeholders, and stress-test your project before it's too late." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'><circle cx='16' cy='16' r='14' stroke='%234F46E5' stroke-width='2' opacity='0.3'/><circle cx='16' cy='16' r='9' stroke='%234F46E5' stroke-width='2' opacity='0.6'/><circle cx='16' cy='16' r='4' stroke='%234F46E5' stroke-width='2'/><circle cx='16' cy='16' r='2' fill='%2306B6D4'/><line x1='16' y1='16' x2='27' y2='5' stroke='%2306B6D4' stroke-width='2' stroke-linecap='round'/></svg>" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="brand">
+          <svg class="brand-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="14" cy="14" r="12" stroke="var(--accent)" stroke-width="1.5" opacity="0.25"/>
+            <circle cx="14" cy="14" r="7.5" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
+            <circle cx="14" cy="14" r="3" stroke="var(--accent)" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="14" cy="14" r="1.5" fill="var(--brand-horizon)"/>
+            <line x1="14" y1="14" x2="23" y2="5" stroke="var(--brand-horizon)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          </svg>
+          <div class="brand-text">
+            <div class="brand-row">
+              <h1 class="brand-name">Radar<span class="brand-ai">Lens</span></h1>
+              <span class="brand-divider" aria-hidden="true"></span>
+              <span class="brand-sub">AI Superpowers for Project Managers</span>
+            </div>
+            <p class="tagline" id="header-tagline">Identify risks before they identify you.</p>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="tier-switch hidden" id="tier-switch">
+          <button class="tier-btn active" data-tier="free">Free</button>
+          <button class="tier-btn" data-tier="pro">Pro</button>
+        </div>
+        <button id="theme-toggle" class="theme-toggle">☾ Dark</button>
+      </div>
+    </div>
+    <!-- MODULE NAV -->
+    <nav class="module-nav hidden" id="module-nav">
+      <div class="module-nav-inner">
+        <button class="module-tab" data-module="cockpit">Radar View</button>
+        <button class="module-tab" data-module="stakeholders">Stakeholders</button>
+        <button class="module-tab" data-module="risks">Risks</button>
+        <button class="module-tab" data-module="dependencies">Dependencies</button>
+        <button class="module-tab" data-module="scenarios">Scenarios</button>
+        <button class="module-tab" data-module="export">Export</button>
+      </div>
+      <div class="project-nav-label hidden" id="project-nav-label"></div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- VALUE STRIP -->
+    <div class="value-strip" id="value-strip">
+      <div class="value-strip-item">
+        <span class="value-strip-icon">⚠</span>
+        <span class="value-strip-label">Risk register<br><small>Scored &amp; mapped</small></span>
+      </div>
+      <div class="value-strip-divider"></div>
+      <div class="value-strip-item">
+        <span class="value-strip-icon">◎</span>
+        <span class="value-strip-label">Stakeholder map<br><small>Power/interest matrix</small></span>
+      </div>
+      <div class="value-strip-divider"></div>
+      <div class="value-strip-item">
+        <span class="value-strip-icon">⬡</span>
+        <span class="value-strip-label">Dependency map<br><small>Blockers identified</small></span>
+      </div>
+      <div class="value-strip-divider"></div>
+      <div class="value-strip-item">
+        <span class="value-strip-icon">◈</span>
+        <span class="value-strip-label">Scenario analysis<br><small>Best · Realistic · Worst</small></span>
+      </div>
+      <div class="value-strip-divider"></div>
+      <div class="value-strip-item">
+        <span class="value-strip-icon">✦</span>
+        <span class="value-strip-label">Mitigation plan<br><small>Ranked by impact</small></span>
+      </div>
+    </div>
+
+    <!-- INPUT FORM -->
+    <section class="card" id="form-section">
+      <h2>Project Details</h2>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="project-name">Project Name <span class="required">*</span></label>
+          <input type="text" id="project-name" placeholder="e.g. Datacenter Migration 2026" />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="scope">Project Scope <span class="required">*</span></label>
+          <textarea id="scope" rows="4" placeholder="Describe the project objectives, deliverables, and boundaries..."></textarea>
+          <span class="field-hint">The more detail you provide, the more accurate and relevant your assessment will be.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="start-date">Start Date <span class="required">*</span></label>
+          <input type="date" id="start-date" />
+        </div>
+
+        <div class="form-group">
+          <label for="end-date">End Date <span class="required">*</span></label>
+          <input type="date" id="end-date" />
+        </div>
+
+        <div class="form-group">
+          <label for="budget">Budget <span class="required">*</span></label>
+          <div class="budget-input-row">
+            <select id="currency">
+              <option value="$">$ USD</option>
+              <option value="€">€ EUR</option>
+              <option value="£">£ GBP</option>
+              <option value="¥">¥ JPY</option>
+              <option value="C$">C$ CAD</option>
+              <option value="A$">A$ AUD</option>
+              <option value="CHF">CHF</option>
+            </select>
+            <input type="number" id="budget" placeholder="e.g. 500000" min="0" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="industry">Industry <span class="optional">(optional)</span></label>
+          <select id="industry">
+            <option value="">— Select industry —</option>
+            <option value="IT">IT & Technology</option>
+            <option value="Construction">Construction</option>
+            <option value="Pharma">Pharma & Life Sciences</option>
+            <option value="Finance">Finance & Banking</option>
+            <option value="Retail">Retail & E-commerce</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Energy">Energy & Utilities</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="confidentiality-notice">
+        <span class="conf-icon">🔒</span>
+        <span>Keep it generic — describe your project in terms a stranger could understand. No client names, no internal systems, no proprietary data. The AI generates new knowledge; it doesn't need your confidential details to do it well.</span>
+      </div>
+      <div class="generate-cta">
+        <button id="generate-btn" class="btn-generate">⚡ Stress-Test This Project</button>
+        <span class="generate-hint">AI-powered · Takes ~10 seconds</span>
+      </div>
+      <div class="devmode-toggle">
+        <label class="devmode-label">
+          <input type="checkbox" id="devmode-checkbox" />
+          <span class="devmode-text">Dev mode — use mock data (Rack Remediation)</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ERROR BANNER -->
+    <div class="error-banner hidden" id="error-banner">
+      <div class="error-banner-inner">
+        <span class="error-banner-icon">⚠</span>
+        <div class="error-banner-content">
+          <strong id="error-banner-title">Something went wrong</strong>
+          <span id="error-banner-msg"></span>
+        </div>
+        <button class="error-banner-retry" id="error-banner-retry">Try again</button>
+        <button class="error-banner-close" id="error-banner-close">×</button>
+      </div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <section class="card hidden" id="loading-section">
+      <div class="loading-inner">
+        <div class="spinner"></div>
+        <p id="loading-message" class="loading-message">Analyzing your project...</p>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="hidden" id="results-section">
+
+      <!-- PROJECT BANNER (siempre visible, fuera de tabs) -->
+      <div class="project-banner" id="project-banner">
+        <div class="project-banner-label">Full Project Assessment</div>
+        <div class="project-banner-name" id="result-project-name"></div>
+        <div class="project-banner-meta" id="result-project-meta"></div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           MODULE: PM COCKPIT
+      ══════════════════════════════════════════ -->
+      <section class="module-section" id="module-cockpit">
+
+        <!-- PROJECT PULSE BAR -->
+        <div class="pulse-bar card">
+          <div class="pulse-item">
+            <span class="pulse-label">Timeline</span>
+            <span class="pulse-value" id="pulse-timeline">—</span>
+            <span class="pulse-sub" id="pulse-timeline-sub"></span>
+          </div>
+          <div class="pulse-divider"></div>
+          <div class="pulse-item">
+            <span class="pulse-label">Critical Risks</span>
+            <span class="pulse-value pulse-value-alert" id="pulse-critical">—</span>
+            <span class="pulse-sub" id="pulse-critical-sub"></span>
+          </div>
+          <div class="pulse-divider"></div>
+          <div class="pulse-item">
+            <span class="pulse-label">Resistant</span>
+            <span class="pulse-value pulse-value-warn" id="pulse-resistant">—</span>
+            <span class="pulse-sub">stakeholders</span>
+          </div>
+          <div class="pulse-divider"></div>
+          <div class="pulse-item">
+            <span class="pulse-label">Blocked</span>
+            <span class="pulse-value pulse-value-warn" id="pulse-blocked">—</span>
+            <span class="pulse-sub">dependencies</span>
+          </div>
+          <div class="pulse-divider"></div>
+          <div class="pulse-item">
+            <span class="pulse-label">Mitigations</span>
+            <span class="pulse-value pulse-value-positive" id="pulse-mitigations">—</span>
+            <span class="pulse-sub">applied</span>
+          </div>
+          <div class="pulse-divider"></div>
+          <div class="pulse-item">
+            <span class="pulse-label">Coverage</span>
+            <span class="pulse-value" id="pulse-coverage">—</span>
+            <span class="pulse-sub">/ 4 modules</span>
+          </div>
+        </div>
+
+        <!-- ROW 1: READINESS BADGE + PROJECT OUTLOOK + STAKEHOLDER PULSE -->
+        <div class="cockpit-hero-row">
+
+          <div class="readiness-wrap-inner">
+            <div class="readiness-badge" id="readiness-badge">
+              <div class="readiness-level" id="readiness-level">—</div>
+              <div class="readiness-score-wrap">
+                <span class="readiness-score" id="readiness-score">—</span>
+                <span class="readiness-score-label">/100</span>
+              </div>
+              <div class="readiness-trend" id="readiness-trend"></div>
+              <div class="readiness-projected hidden" id="readiness-projected"></div>
+              <div class="readiness-label">Project Readiness</div>
+              <div class="readiness-breakdown hidden" id="readiness-breakdown"></div>
+            </div>
+            <button class="btn-optimize-nudge hidden" id="btn-optimize-nudge">⚡ Optimize your plan →</button>
+          </div>
+
+          <div class="project-outlook hidden" id="project-outlook">
+            <div class="outlook-title">Scenario Overview</div>
+            <div class="outlook-rows" id="outlook-rows"></div>
+            <button class="outlook-link" data-module="scenarios">View full scenario analysis →</button>
+          </div>
+
+          <div class="stakeholder-pulse hidden" id="stakeholder-pulse">
+            <div class="pulse-title">Stakeholder Pulse</div>
+            <div class="pulse-quadrants" id="pulse-quadrants"></div>
+            <div class="pulse-alerts hidden" id="pulse-alerts"></div>
+            <button class="outlook-link" data-module="stakeholders" data-scroll-to="module-stakeholders">View stakeholder map →</button>
+          </div>
+
+        </div>
+
+        <!-- ROW 2: MODULE CARDS -->
+        <div class="cockpit-grid">
+          <div class="cockpit-card" id="cockpit-card-stakeholders">
+            <div class="cockpit-card-header">
+              <span class="cockpit-card-title">Stakeholders</span>
+              <span class="cockpit-card-score" id="cockpit-stakeholders-score">—</span>
+            </div>
+            <div class="cockpit-card-meta" id="cockpit-stakeholders-meta"></div>
+            <div class="cockpit-card-bar-wrap">
+              <div class="cockpit-card-bar-track">
+                <div class="cockpit-card-bar-fill" id="cockpit-stakeholders-bar"></div>
+              </div>
+            </div>
+            <button class="cockpit-card-btn" data-module="stakeholders">View map →</button>
+          </div>
+
+          <div class="cockpit-card" id="cockpit-card-risks">
+            <div class="cockpit-card-header">
+              <span class="cockpit-card-title">Risks</span>
+              <span class="cockpit-card-score" id="cockpit-risks-score">—</span>
+            </div>
+            <div class="cockpit-card-meta" id="cockpit-risks-meta"></div>
+            <div class="cockpit-card-bar-wrap">
+              <div class="cockpit-card-bar-track">
+                <div class="cockpit-card-bar-fill" id="cockpit-risks-bar"></div>
+              </div>
+            </div>
+            <button class="cockpit-card-btn" data-module="risks">View details →</button>
+          </div>
+
+          <div class="cockpit-card" id="cockpit-card-deps">
+            <div class="cockpit-card-header">
+              <span class="cockpit-card-title">Dependencies</span>
+              <span class="cockpit-card-score" id="cockpit-deps-score">—</span>
+            </div>
+            <div class="cockpit-card-meta" id="cockpit-deps-meta"></div>
+            <div class="cockpit-card-bar-wrap">
+              <div class="cockpit-card-bar-track">
+                <div class="cockpit-card-bar-fill" id="cockpit-deps-bar"></div>
+              </div>
+            </div>
+            <button class="cockpit-card-btn" data-module="dependencies">View details →</button>
+          </div>
+
+          <div class="cockpit-card" id="cockpit-card-scenarios">
+            <div class="cockpit-card-header">
+              <span class="cockpit-card-title">Scenarios</span>
+              <span class="cockpit-card-score" id="cockpit-scenarios-score">—</span>
+            </div>
+            <div class="cockpit-card-meta" id="cockpit-scenarios-meta"></div>
+            <div class="cockpit-card-bar-wrap">
+              <div class="cockpit-card-bar-track">
+                <div class="cockpit-card-bar-fill" id="cockpit-scenarios-bar"></div>
+              </div>
+            </div>
+            <button class="cockpit-card-btn" data-module="scenarios">View analysis →</button>
+          </div>
+        </div>
+
+
+        <!-- ACTION TABLE (Quick Wins) -->
+        <div class="card" id="cockpit-quickwins">
+          <h2>Priority Actions</h2>
+          <p class="quickwins-desc">Highest impact actions you can take right now.</p>
+          <div id="quickwins-list"></div>
+        </div>
+
+        <!-- FREE TIER NUDGE -->
+        <div id="cockpit-free-nudge" class="cockpit-free-nudge hidden">
+          Free plan · 9 risks analyzed — <a href="#" class="nudge-upgrade-link">Upgrade to Pro</a> for 20+ risks, Export &amp; Optimizer
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════════
+           MODULE: RISKS
+      ══════════════════════════════════════════ -->
+      <section class="module-section hidden" id="module-risks">
+
+        <!-- SUMMARY BAR -->
+        <div class="summary-bar card">
+          <div class="summary-item summary-item-hero">
+            <span class="summary-label">Health Score</span>
+            <div class="summary-score-wrap">
+              <span class="summary-value summary-value-hero" id="health-score">—</span>
+              <span class="summary-baseline hidden" id="health-baseline"></span>
+            </div>
+            <span class="summary-best" id="health-best"></span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-secondaries">
+            <div class="summary-item">
+              <span class="summary-label">Risks</span>
+              <span class="summary-value" id="risk-count">—</span>
+              <span class="summary-sublabel" id="risk-count-sub"></span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Critical</span>
+              <span class="summary-value critical" id="critical-count">—</span>
+              <span class="summary-sublabel" id="critical-count-sub"></span>
+            </div>
+            <div class="summary-item summary-item-actions">
+              <span class="summary-label">Mitigations</span>
+              <span class="summary-value positive" id="mitigation-count">0</span>
+              <button class="btn-clear-mit hidden" id="clear-mitigations-btn">Clear all</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-grid">
+
+          <!-- HEATMAP -->
+          <div class="card" id="anchor-heatmap">
+            <h2>Risk Heatmap</h2>
+            <div class="heatmap-wrapper">
+              <div class="heatmap-y-label">Probability</div>
+              <div class="heatmap-container">
+                <div class="heatmap-grid" id="heatmap-grid">
+                  <div class="heatmap-cell medium"  data-prob="high" data-imp="low"><span class="cell-dots" id="cell-high-low"></span></div>
+                  <div class="heatmap-cell high"     data-prob="high" data-imp="medium"><span class="cell-dots" id="cell-high-medium"></span></div>
+                  <div class="heatmap-cell critical" data-prob="high" data-imp="high"><span class="cell-dots" id="cell-high-high"></span></div>
+                  <div class="heatmap-cell low"      data-prob="medium" data-imp="low"><span class="cell-dots" id="cell-medium-low"></span></div>
+                  <div class="heatmap-cell medium"   data-prob="medium" data-imp="medium"><span class="cell-dots" id="cell-medium-medium"></span></div>
+                  <div class="heatmap-cell high"     data-prob="medium" data-imp="high"><span class="cell-dots" id="cell-medium-high"></span></div>
+                  <div class="heatmap-cell low"      data-prob="low" data-imp="low"><span class="cell-dots" id="cell-low-low"></span></div>
+                  <div class="heatmap-cell low"      data-prob="low" data-imp="medium"><span class="cell-dots" id="cell-low-medium"></span></div>
+                  <div class="heatmap-cell medium"   data-prob="low" data-imp="high"><span class="cell-dots" id="cell-low-high"></span></div>
+                </div>
+                <div class="heatmap-x-labels">
+                  <span>Low</span><span>Medium</span><span>High</span>
+                </div>
+              </div>
+              <div class="heatmap-y-labels">
+                <span>High</span><span>Med</span><span>Low</span>
+              </div>
+            </div>
+            <div class="heatmap-x-label">Impact</div>
+          </div>
+
+          <!-- COVERAGE -->
+          <div class="card" id="coverage-section">
+            <h2>Risk Coverage</h2>
+            <div class="coverage-bars" id="coverage-bars"></div>
+          </div>
+
+        </div>
+
+        <!-- MITIGATION OPTIMIZER -->
+        <div class="card hidden" id="anchor-optimizer">
+          <div id="budget-teaser">
+            <div class="budget-teaser-inner">
+              <div class="budget-teaser-text">
+                <h2>Mitigation Optimizer <span class="pro-badge">PRO</span></h2>
+                <p class="budget-mode-desc">Set your team capacity and the optimizer calculates the best mitigations — then sends the plan directly to your Action Plan in Radar View.</p>
+              </div>
+              <button class="btn-upgrade">Upgrade to Pro</button>
+            </div>
+          </div>
+          <div class="hidden" id="budget-full">
+            <div class="budget-mode-header">
+              <div>
+                <h2>Mitigation Optimizer <span class="pro-badge">PRO</span></h2>
+                <p class="budget-mode-desc">How much can your team realistically take on right now?</p>
+              </div>
+            </div>
+            <div class="optimizer-mode-selector">
+              <div class="optimizer-mode-card active" data-mode="quick">
+                <div class="optimizer-mode-title">Quick wins</div>
+                <div class="optimizer-mode-desc">Low-effort actions your team can start this week. No budget required.</div>
+              </div>
+              <div class="optimizer-mode-card" data-mode="balanced">
+                <div class="optimizer-mode-title">Balanced plan</div>
+                <div class="optimizer-mode-desc">Best combination of impact and effort. Recommended starting point.</div>
+              </div>
+              <div class="optimizer-mode-card" data-mode="full">
+                <div class="optimizer-mode-title">Full commitment</div>
+                <div class="optimizer-mode-desc">Maximum risk reduction. Requires sustained team commitment.</div>
+              </div>
+            </div>
+            <div class="budget-run-row">
+              <button class="btn-primary" id="run-optimizer-btn">Find my best mitigation plan</button>
+            </div>
+            <div class="budget-result hidden" id="budget-result"></div>
+          </div>
+        </div>
+
+        <!-- RISK LIST -->
+        <div class="card" id="anchor-risks">
+          <div class="risk-list-header">
+            <h2>Risk Register</h2>
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="all">All</button>
+              <button class="filter-tab" data-filter="critical">Critical</button>
+              <button class="filter-tab" data-filter="high">High</button>
+              <button class="filter-tab" data-filter="medium">Medium</button>
+              <button class="filter-tab" data-filter="low">Low</button>
+            </div>
+          </div>
+          <div class="active-filters hidden" id="active-filters"></div>
+          <div class="risk-edit-hint hidden" id="risk-edit-hint">
+            <span class="hint-icon">💡</span> Tip: click <strong>✏️ Edit risk</strong> on any expanded card to adjust probability, impact or description.
+          </div>
+          <div id="risk-list"></div>
+
+          <!-- ADD RISK -->
+          <div class="add-risk-section hidden" id="add-risk-section">
+            <div id="add-risk-free">
+              <div class="add-risk-teaser">
+                <div class="add-risk-teaser-text">
+                  <span class="add-risk-teaser-title">Add custom risk <span class="pro-badge">PRO</span></span>
+                  <span class="add-risk-teaser-desc">Identify risks the AI didn't catch and add them to your register.</span>
+                </div>
+                <button class="btn-upgrade btn-upgrade-sm">Upgrade to Pro</button>
+              </div>
+            </div>
+            <div class="hidden" id="add-risk-pro">
+              <div class="add-risk-form">
+                <h3 class="add-risk-form-title">Add Custom Risk</h3>
+                <div class="add-risk-grid">
+                  <div class="form-group full-width">
+                    <label>Title <span class="required">*</span></label>
+                    <input type="text" id="new-risk-title" placeholder="e.g. Key sponsor leaves mid-project" />
+                  </div>
+                  <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea id="new-risk-desc" rows="2" placeholder="Why is this a risk for this project?"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Category</label>
+                    <select id="new-risk-category">
+                      <option value="Technical">Technical</option>
+                      <option value="Resources">Resources</option>
+                      <option value="External">External</option>
+                      <option value="Regulatory">Regulatory</option>
+                      <option value="Financial">Financial</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Probability</label>
+                    <select id="new-risk-probability">
+                      <option value="low">Low</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Impact</label>
+                    <select id="new-risk-impact">
+                      <option value="low">Low</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="add-risk-actions">
+                  <button class="btn-primary" id="save-risk-btn" style="max-width:160px">Add Risk</button>
+                  <button class="btn-secondary" id="cancel-risk-btn">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </section>
+
+      <!-- ══════════════════════════════════════════
+           MODULE: STAKEHOLDERS
+      ══════════════════════════════════════════ -->
+      <section class="module-section hidden" id="module-stakeholders">
+
+        <!-- Summary bar -->
+        <div class="summary-bar card">
+          <div class="summary-item summary-item-hero">
+            <span class="summary-label">Stakeholder Health</span>
+            <div class="summary-score-wrap">
+              <span class="summary-value summary-value-hero" id="stakeholders-health-score">—</span>
+            </div>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-secondaries">
+            <div class="summary-item">
+              <span class="summary-label">Total</span>
+              <span class="summary-value" id="stakeholders-count">—</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Resistant</span>
+              <span class="summary-value critical" id="stakeholders-resistant">—</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Manage Closely</span>
+              <span class="summary-value" id="stakeholders-manage-closely">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Power/Interest Matrix -->
+        <div class="card">
+          <h2>Power / Interest Matrix</h2>
+          <div class="stakeholder-matrix">
+            <div class="matrix-y-label">Power</div>
+            <div class="matrix-inner">
+            <div class="matrix-grid">
+              <div class="matrix-cell matrix-keep-satisfied" id="matrix-keep-satisfied">
+                <div class="matrix-cell-label">Keep Satisfied</div>
+                <div class="matrix-chips" id="chips-keep-satisfied"></div>
+              </div>
+              <div class="matrix-cell matrix-manage-closely" id="matrix-manage-closely">
+                <div class="matrix-cell-label">Manage Closely</div>
+                <div class="matrix-chips" id="chips-manage-closely"></div>
+              </div>
+              <div class="matrix-cell matrix-monitor" id="matrix-monitor">
+                <div class="matrix-cell-label">Monitor</div>
+                <div class="matrix-chips" id="chips-monitor"></div>
+              </div>
+              <div class="matrix-cell matrix-keep-informed" id="matrix-keep-informed">
+                <div class="matrix-cell-label">Keep Informed</div>
+                <div class="matrix-chips" id="chips-keep-informed"></div>
+              </div>
+            </div>
+            <div class="matrix-x-label">Interest</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stakeholder Register -->
+        <div class="card">
+          <div class="risk-list-header">
+            <h2>Stakeholder Register</h2>
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-sh-filter="all">All</button>
+              <button class="filter-tab" data-sh-filter="resistant">Resistant</button>
+              <button class="filter-tab" data-sh-filter="manage-closely">Manage Closely</button>
+              <button class="filter-tab" data-sh-filter="keep-satisfied">Keep Satisfied</button>
+            </div>
+          </div>
+          <div id="stakeholders-list"></div>
+
+          <!-- ADD STAKEHOLDER (Pro) -->
+          <div class="add-risk-section hidden" id="add-stakeholder-section">
+            <div id="add-stakeholder-free">
+              <div class="add-risk-teaser">
+                <div class="add-risk-teaser-text">
+                  <span class="add-risk-teaser-title">Add custom stakeholder <span class="pro-badge">PRO</span></span>
+                  <span class="add-risk-teaser-desc">Add stakeholders the AI didn't identify and position them on the map.</span>
+                </div>
+                <button class="btn-upgrade btn-upgrade-sm">Upgrade to Pro</button>
+              </div>
+            </div>
+            <div class="hidden" id="add-stakeholder-pro">
+              <div class="add-risk-form">
+                <h3 class="add-risk-form-title">Add Custom Stakeholder</h3>
+                <div class="add-risk-grid">
+                  <div class="form-group full-width">
+                    <label>Name / Role <span class="required">*</span></label>
+                    <input type="text" id="new-sh-name" placeholder="e.g. Legal Counsel" />
+                  </div>
+                  <div class="form-group full-width">
+                    <label>Title / Function</label>
+                    <input type="text" id="new-sh-role" placeholder="e.g. Head of Legal" />
+                  </div>
+                  <div class="form-group">
+                    <label>Power</label>
+                    <select id="new-sh-power">
+                      <option value="high">High</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Interest</label>
+                    <select id="new-sh-interest">
+                      <option value="high">High</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Attitude</label>
+                    <select id="new-sh-attitude">
+                      <option value="supportive">Supportive</option>
+                      <option value="neutral" selected>Neutral</option>
+                      <option value="resistant">Resistant</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="add-risk-actions">
+                  <button class="btn-primary" id="save-sh-btn" style="max-width:180px">Add Stakeholder</button>
+                  <button class="btn-secondary" id="cancel-sh-btn">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════════
+           MODULE: DEPENDENCIES
+      ══════════════════════════════════════════ -->
+      <section class="module-section hidden" id="module-dependencies">
+
+        <div class="summary-bar card">
+          <div class="summary-item summary-item-hero">
+            <span class="summary-label">Dependencies Health Score</span>
+            <div class="summary-score-wrap">
+              <span class="summary-value summary-value-hero" id="deps-health-score">—</span>
+            </div>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-secondaries">
+            <div class="summary-item">
+              <span class="summary-label">Total</span>
+              <span class="summary-value" id="deps-total">—</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Blocked</span>
+              <span class="summary-value critical" id="deps-blocked-count">—</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">At Risk</span>
+              <span class="summary-value" id="deps-atrisk-count">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="card">
+            <h2>By Criticality</h2>
+            <div class="coverage-bars" id="deps-criticality-bars"></div>
+          </div>
+          <div class="card">
+            <h2>By Type</h2>
+            <div class="coverage-bars" id="deps-type-bars"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="risk-list-header">
+            <h2>Dependency Register</h2>
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-dep-filter="all">All</button>
+              <button class="filter-tab" data-dep-filter="blocked">Blocked</button>
+              <button class="filter-tab" data-dep-filter="at-risk">At Risk</button>
+              <button class="filter-tab" data-dep-filter="on-track">On Track</button>
+            </div>
+          </div>
+          <div id="deps-list"></div>
+
+          <div id="resolved-deps-section" class="hidden">
+            <button class="closed-toggle" id="resolved-deps-toggle">
+              <span id="resolved-deps-label">▶ Resolved dependencies (0)</span>
+            </button>
+            <div id="resolved-deps-list" class="hidden"></div>
+          </div>
+
+          <!-- ADD DEPENDENCY (Pro) -->
+          <div class="add-risk-section hidden" id="add-dep-section">
+            <div id="add-dep-free">
+              <div class="add-risk-teaser">
+                <div class="add-risk-teaser-text">
+                  <span class="add-risk-teaser-title">Add custom dependency <span class="pro-badge">PRO</span></span>
+                  <span class="add-risk-teaser-desc">Map dependencies the AI didn't identify and track their status.</span>
+                </div>
+                <button class="btn-upgrade btn-upgrade-sm">Upgrade to Pro</button>
+              </div>
+            </div>
+            <div class="hidden" id="add-dep-pro">
+              <div class="add-risk-form">
+                <h3 class="add-risk-form-title">Add Custom Dependency</h3>
+                <div class="add-risk-grid">
+                  <div class="form-group full-width">
+                    <label>Title <span class="required">*</span></label>
+                    <input type="text" id="new-dep-title" placeholder="e.g. Legal sign-off on data agreement" />
+                  </div>
+                  <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea id="new-dep-desc" rows="2" placeholder="What does this dependency block?"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>From</label>
+                    <input type="text" id="new-dep-from" placeholder="e.g. Legal team" />
+                  </div>
+                  <div class="form-group">
+                    <label>To</label>
+                    <input type="text" id="new-dep-to" placeholder="e.g. Project Team" />
+                  </div>
+                  <div class="form-group">
+                    <label>Type</label>
+                    <select id="new-dep-type">
+                      <option value="internal">Internal</option>
+                      <option value="external">External</option>
+                      <option value="technical">Technical</option>
+                      <option value="vendor">Vendor</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Criticality</label>
+                    <select id="new-dep-criticality">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high" selected>High</option>
+                      <option value="critical">Critical</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select id="new-dep-status">
+                      <option value="on-track" selected>On Track</option>
+                      <option value="at-risk">At Risk</option>
+                      <option value="blocked">Blocked</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="add-risk-actions">
+                  <button class="btn-primary" id="save-dep-btn" style="max-width:180px">Add Dependency</button>
+                  <button class="btn-secondary" id="cancel-dep-btn">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════════
+           MODULE: SCENARIOS
+      ══════════════════════════════════════════ -->
+      <section class="module-section hidden" id="module-scenarios">
+
+        <!-- Scenario cards (Free) -->
+        <div class="scenarios-grid" id="scenarios-grid"></div>
+
+        <!-- Comparison table (Pro) -->
+        <div class="card hidden" id="scenarios-comparison-pro">
+          <h2>Scenario Comparison</h2>
+          <table class="scenarios-table" id="scenarios-table"></table>
+        </div>
+
+        <!-- Scenario-Critical Risks (Pro) -->
+        <div class="card hidden" id="scenarios-mitigations-pro">
+          <h2>Scenario-Critical Risks</h2>
+          <p class="quickwins-desc">Risks that most influence this scenario's outcome. Address their mitigations to move the needle. Click to navigate to the risk.</p>
+          <div id="scenarios-key-mitigations"></div>
+        </div>
+
+        <!-- Simulator (Pro) -->
+        <div class="card hidden" id="scenarios-simulator-pro">
+          <h2>Scenario Simulator</h2>
+          <p class="quickwins-desc">Apply mitigations in the Risk Register and watch your forecast shift in real time.</p>
+          <div class="sim-how-it-works">
+            <span class="sim-how-title">How to use it</span>
+            Go to the <strong>Risks tab</strong> → expand any risk → click a mitigation to activate it.
+            The <span class="sim-dot-inline sim-dot-blue"></span> <strong>Now</strong> marker moves right toward Best Case as you apply mitigations.
+            The <span class="sim-dot-inline sim-dot-orange"></span> <strong>Baseline</strong> stays fixed — it's your starting point with no mitigations.
+            Use this to build a mitigation plan you can defend in your next steering committee.
+          </div>
+        </div>
+
+        <!-- Upgrade teaser for Pro features (Free only) -->
+        <div id="scenarios-pro-teaser">
+          <div class="add-risk-teaser" style="margin-top:0">
+            <div class="add-risk-teaser-text">
+              <span class="add-risk-teaser-title">Scenario Simulator &amp; Comparison Table <span class="pro-badge">PRO</span></span>
+              <span class="add-risk-teaser-desc">Apply mitigations and watch the Realistic scenario improve in real time. Plus a comparison table ready to paste into your steering deck.</span>
+            </div>
+            <button class="btn-upgrade btn-upgrade-sm">Upgrade to Pro</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════════
+           MODULE: EXPORT
+      ══════════════════════════════════════════ -->
+      <section class="module-section hidden" id="module-export">
+        <div class="card">
+          <div id="export-free">
+            <div class="add-risk-teaser">
+              <div class="add-risk-teaser-text">
+                <span class="add-risk-teaser-title">Export assessment <span class="pro-badge">PRO</span></span>
+                <span class="add-risk-teaser-desc">Download your full assessment as PDF or Excel — ready for steering committees and stakeholders.</span>
+              </div>
+              <button class="btn-upgrade btn-upgrade-sm">Upgrade to Pro</button>
+            </div>
+          </div>
+          <div class="hidden" id="export-pro">
+            <h2>Export Assessment</h2>
+            <div class="export-options">
+              <button class="export-btn" id="export-pdf-btn">
+                <span class="export-icon">📄</span>
+                <span class="export-label">Export PDF</span>
+                <span class="export-desc">Full report with heatmap and scenarios</span>
+              </button>
+              <button class="export-btn" id="export-excel-btn">
+                <span class="export-icon">📊</span>
+                <span class="export-label">Export Excel</span>
+                <span class="export-desc">Risk register with all fields and mitigations</span>
+              </button>
+            </div>
+            <div class="export-session-section">
+              <h3 class="export-session-title">Session</h3>
+              <p class="export-session-desc">Save your full assessment — risks, issues, dependencies, mitigations and owners — and reload it in a future session without regenerating.</p>
+              <div class="export-options">
+                <button class="export-btn" id="export-session-btn">
+                  <span class="export-icon">💾</span>
+                  <span class="export-label">Save session</span>
+                  <span class="export-desc">Download a .json file with the full assessment state</span>
+                </button>
+                <label class="export-btn export-btn-load" for="load-session-input">
+                  <span class="export-icon">📂</span>
+                  <span class="export-label">Load session</span>
+                  <span class="export-desc">Restore a previously saved assessment</span>
+                </label>
+                <input type="file" id="load-session-input" accept=".json" class="hidden" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="results-actions">
+        <button class="btn-secondary" id="new-assessment-btn">New Assessment</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Built by a Senior Project Manager who got tired of doing this manually. &copy; 2026 <a href="https://radarlens.app" class="footer-link">radarlens.app</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
