@@ -1498,11 +1498,13 @@ function applyTier(tier) {
     });
   });
 
-  document.getElementById('cockpit-free-nudge')?.querySelector('.nudge-upgrade-link')?.addEventListener('click', e => {
-    e.preventDefault();
-    applyTier('pro');
-    renderCockpitScores();
-  });
+  if (isLocalhost) {
+    document.getElementById('cockpit-free-nudge')?.querySelector('.nudge-upgrade-link')?.addEventListener('click', e => {
+      e.preventDefault();
+      applyTier('pro');
+      renderCockpitScores();
+    });
+  }
 }
 
 // ── Module Tab Navigation ────────────────────────────────────────────────────
