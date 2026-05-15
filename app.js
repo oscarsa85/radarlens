@@ -1,6 +1,7 @@
 ﻿// ── Config ──────────────────────────────────────────────────────────────────
-const API_URL  = 'https://radarlens-proxy.oscarsa85.workers.dev';
-const MODEL    = 'anthropic/claude-haiku-4-5';
+const API_URL    = 'https://radarlens-proxy.oscarsa85.workers.dev';
+const MODEL      = 'anthropic/claude-haiku-4-5';
+const isLocalhost = ['localhost', '127.0.0.1'].includes(location.hostname);
 let DEV_MODE = false;
 
 // ── State ────────────────────────────────────────────────────────────────────
@@ -3353,7 +3354,6 @@ function setupAddDep() {
 
 // ── Dev mode toggle (localhost only) ─────────────────────────────────────────
 const devmodeCheckbox = document.getElementById('devmode-checkbox');
-const isLocalhost = ['localhost', '127.0.0.1'].includes(location.hostname);
 if (devmodeCheckbox) {
   if (!isLocalhost) {
     devmodeCheckbox.closest('.devmode-toggle')?.remove();
