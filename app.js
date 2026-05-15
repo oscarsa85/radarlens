@@ -1476,9 +1476,9 @@ function applyTier(tier) {
   if (nudge) nudge.classList.toggle('hidden', tier === 'pro');
 }
 
-// always show tier switch
+// tier switch — localhost only
 {
-  document.getElementById('tier-switch').classList.remove('hidden');
+  if (isLocalhost) document.getElementById('tier-switch').classList.remove('hidden');
   document.querySelectorAll('.tier-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       applyTier(btn.dataset.tier);
