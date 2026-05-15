@@ -60,6 +60,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* ── Header ── */
@@ -69,6 +70,8 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
+  width: 100%;
+  box-sizing: border-box;
 }
 .header-inner {
   max-width: 1000px;
