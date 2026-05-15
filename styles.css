@@ -270,6 +270,7 @@ main {
   .value-strip-divider { display: none; }
   .value-strip-item { min-width: 45%; }
   .header-inner { padding: 12px 16px; }
+  .brand-sub { display: none; }
 }
 
 /* ── Card ── */
