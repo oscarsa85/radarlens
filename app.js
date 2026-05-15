@@ -3411,7 +3411,10 @@ themeToggle.addEventListener('click', () => {
 });
 
 function updateThemeButton(theme) {
-  themeToggle.textContent = theme === 'dark' ? '☀ Light' : '☾ Dark';
+  const isMobile = window.innerWidth <= 640;
+  themeToggle.textContent = theme === 'dark'
+    ? (isMobile ? '☀' : '☀ Light')
+    : (isMobile ? '☾' : '☾ Dark');
 }
 
 // ── Filter tabs ───────────────────────────────────────────────────────────────
