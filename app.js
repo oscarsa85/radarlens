@@ -72,6 +72,10 @@ const LOADING_MESSAGES = [
   'Finding out what keeps your sponsor up at night...',
   'Calculating how far your worst case really is...',
   'Building the risk register your PM methodology always wanted...',
+  'Running scenarios your steering committee hasn\'t thought of yet...',
+  'Pressure-testing assumptions your team made in the kickoff meeting...',
+  'Checking if your risk register covers more than just \'resource availability\'...',
+  'Estimating how much buffer you\'ll actually need — not just what you asked for...',
 ];
 
 function startLoadingMessages() {
@@ -85,7 +89,7 @@ function startLoadingMessages() {
       el.textContent = LOADING_MESSAGES[i];
       el.style.opacity = '1';
     }, 300);
-  }, 3500);
+  }, 5000);
 }
 
 function stopLoadingMessages() {
@@ -3609,8 +3613,32 @@ generateBtn.addEventListener('click', async () => {
     alert('Please fill in all required fields.');
     return;
   }
-  if (new Date(endDate) <= new Date(startDate)) {
-    alert('End date must be after start date.');
+  if (projectName.length < 3) {
+    alert('Your project deserves a name. At least give it three characters.');
+    return;
+  }
+  if (projectName.length > 100) {
+    alert('That\'s a manifesto, not a project name. Keep it under 100 characters.');
+    return;
+  }
+  if (scope.length < 50) {
+    alert('The AI is only as good as your brief. Give it at least a sentence to work with.');
+    return;
+  }
+  if (Number(budget) < 100) {
+    alert('Even the smallest projects deserve a real budget. Try something above $100.');
+    return;
+  }
+  const start = new Date(startDate);
+  const end   = new Date(endDate);
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  if (start < oneYearAgo) {
+    alert('That project would already be over. Use a current or future start date.');
+    return;
+  }
+  if (end <= start) {
+    alert('Time only moves forward — and so do projects. Check your dates.');
     return;
   }
 
